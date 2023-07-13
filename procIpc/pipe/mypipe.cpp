@@ -20,8 +20,8 @@ int main()
     (void)n;             // 防止release 模式 告警 n只定义未使用
 
 #ifdef DEBUG
-    cout << "pipe[0]:" << pipfd[0] << endl; // 3
-    cout << "pipe[1]:" << pipfd[1] << endl; // 4
+    cout << "pipfd[0]:" << pipfd[0] << endl; // 3
+    cout << "pipfd[1]:" << pipfd[1] << endl; // 4
 #endif
 
     // 2. 创建子进程
@@ -34,7 +34,7 @@ int main()
         // 3. 构建单向通信的信道 设父进程写入 子进程读取
         // 3. 关闭子进程不需要的fd
         close(pipfd[1]);
-
+        int count = 0;
         char buffer[1024];
         while (true)
         {
@@ -46,11 +46,14 @@ int main()
                 buffer[s] = 0;
                 cout << "child get a message[" << getpid() << "]   Father #" << buffer << endl;
             }
-            else if (s == 0)
-            {
-                cout << "writer quit(father), me quit!!" << endl;
-                break;
-            }
+            // else if (s == 0) // 写端的fd已关闭
+            // {
+            //     cout << "writer quit(father), me quit!!" << endl;
+            //     break;
+            // }
+            count++;
+            if (count == 5)
+                close(pipfd[0]); // 关闭读端 写端被OS自动关闭
         }
 
         exit(0);
@@ -73,11 +76,11 @@ int main()
         printf("father send:%d\n", count++);
         // 3.4 故意sleep
         sleep(1);
-        if (count == 5)
-        {
-            cout << "writer quite!\n";
-            break;
-        }
+        // if (count == 5)
+        // {
+        //     cout << "writer quite!\n";
+        //     break;
+        // }
     }
 
     close(pipfd[1]);
