@@ -10,10 +10,10 @@
 #define DEBUG 3
 
 const std::string msg[] = {
-    "Debug",
     "Notice",
     "Warning",
-    "Error"};
+    "Error",
+    "Debug"};
 std::ostream &Log(std::string message, int level)
 {
     std::cout << " | " << (unsigned)time(nullptr) << " | " << msg[level] << " | " << message;
