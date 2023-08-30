@@ -7,7 +7,7 @@ int main()
 {
     pid_t id = fork();
 
-    if(id == 0)
+    if (id == 0)
     {
         printf("我是子进程\n");
     }

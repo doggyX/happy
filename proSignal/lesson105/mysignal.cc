@@ -7,7 +7,7 @@ SIG_IGN 行为-忽略
 验证将所有信号阻塞 会不会导致进程无法被结束? 不会
 1. 9号不会被捕捉，不可被屏蔽 SIGKILL
 2. 实验发现19也不可被屏蔽 20也不可屏蔽，但似乎没有终止进程
-2023/8/4 完成
+2023/8/4 完成0.........
 */
 #include <unistd.h>
 #include <iostream>
@@ -48,7 +48,7 @@ static void blockSig(int sig)
 
 int main()
 {
-    // 3
+    // 3 
     for (int sig = 1; sig <= 31; sig++)
     {
         blockSig(sig);

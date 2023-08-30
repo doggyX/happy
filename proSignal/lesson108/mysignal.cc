@@ -12,25 +12,45 @@ O优化 是在编译阶段就优化好了,不是执行的时候
 #include <unistd.h>
 
 using namespace std;
-
-void handler(int signum)
-{
-    cout << "子进程退出: " << signum << endl;
-}
-
+// 如果我们不想等待子进程，并且我们还想让子进程退出之后，自动释放僵尸子进程
 int main()
 {
-    signal(SIGCHLD, handler);
+    // OS 默认就是忽略的
+    signal(SIGCHLD, SIG_IGN); // 手动设置对子进程进行忽略
 
-    if (fork() == 0)
+    if(fork() == 0)
     {
-        sleep(1);
+        cout << "child: " << getpid() << endl;
+        sleep(5);
         exit(0);
     }
 
-    while (true)
+    while(true)
+    {
+        cout << "parent: " << getpid() << " 执行我自己的任务!" << endl;
         sleep(1);
+    }
 }
+
+
+// void handler(int signum)
+// {
+//     cout << "子进程退出: " << signum << endl;
+// }
+
+// int main()
+// {
+//     signal(SIGCHLD, handler);
+
+//     if (fork() == 0)
+//     {
+//         sleep(1);
+//         exit(0);
+//     }
+
+//     while (true)
+//         sleep(1);
+// }
 
 // volatile int flag = 0; // 作用 : 有可能被编译器优化(开O1就优化了), 这里不让编译器自作主张优化
 // // O优化 是在编译阶段就优化好了,不是执行的时候
